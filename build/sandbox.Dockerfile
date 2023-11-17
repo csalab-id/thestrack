@@ -1,6 +1,6 @@
 FROM debian:12
-RUN apt update && \
-apt install -y openbox \
+RUN apt-get update && \
+apt-get install -y openbox \
   firefox-esr \
   curl \
   wget \
