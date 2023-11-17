@@ -6,6 +6,9 @@ services:
     image: 'tomcat:9.0.83'
     volumes:
       - ./data/tomcat:/usr/local/tomcat/webapps/webapp
+    environment:
+      - http_proxy=http://10.20.0.20:8080
+      - http_proxys=http://10.20.0.20:8080
     depends_on:
       - mitmproxy
     networks:
@@ -18,6 +21,9 @@ services:
     image: 'php:5.6.40-apache-stretch'
     volumes:
       - ./data/php/5:/var/www/html
+    environment:
+      - http_proxy=http://10.20.0.20:8080
+      - http_proxys=http://10.20.0.20:8080
     depends_on:
       - mitmproxy
     networks:
@@ -30,6 +36,9 @@ services:
     image: 'php:7.4.33-apache-bullseye'
     volumes:
       - ./data/php/7:/var/www/html
+    environment:
+      - http_proxy=http://10.20.0.20:8080
+      - http_proxys=http://10.20.0.20:8080
     depends_on:
       - mitmproxy
     networks:
@@ -42,6 +51,9 @@ services:
     image: 'php:8.3-rc-apache-bookworm'
     volumes:
       - ./data/php/8:/var/www/html
+    environment:
+      - http_proxy=http://10.20.0.20:8080
+      - http_proxys=http://10.20.0.20:8080
     depends_on:
       - mitmproxy
     networks:
@@ -53,21 +65,29 @@ services:
     hostname: mitmproxy.lab
     image: 'mitmproxy/mitmproxy:10.1.5'
     command: ["mitmweb", "--web-host", "0.0.0.0"]
+    ports:
+      - 0.0.0.0:8081:8081
+    dns:
+      - 10.21.0.23
+    depends_on:
+      - pihole
     networks:
       public:
         ipv4_address: 10.21.0.20
       research:
         ipv4_address: 10.20.0.20
 
-  openbox:
-    container_name: openbox
-    hostname: openbox.lab
+  sandbox:
+    container_name: sandbox
+    hostname: sandbox.lab
     build:
       context: .
-      dockerfile: build/openbox.Dockerfile
-    image: 'csalab/barenv-openbox:latest'
+      dockerfile: build/sandbox.Dockerfile
+    image: 'csalab/barenv-sandbox:latest'
     environment:
       - PASSWORD=${PASSWORD:-password}
+      - http_proxy=http://10.20.0.20:8080
+      - http_proxys=http://10.20.0.20:8080
     depends_on:
       - mitmproxy
     networks:
@@ -81,13 +101,52 @@ services:
     ports:
       - 0.0.0.0:9090:9090
     depends_on:
-      - openbox
+      - sandbox
     entrypoint: ["socat", "TCP-LISTEN:9090,fork", "TCP:10.20.0.21:80"]
     networks:
       public:
         ipv4_address: 10.21.0.22
       research:
         ipv4_address: 10.20.0.22
+  
+  pihole:
+    container_name: pihole
+    hostname: pihole.lab
+    image: pihole/pihole:latest
+    ports:
+      - 0.0.0.0:8082:80/tcp
+    environment:
+      - TZ=Asia/Jakarta
+      - WEBPASSWORD=${PASSWORD:-password}
+    volumes:
+      - pihole_etc:/etc/pihole
+      - pihole_dns:/etc/dnsmasq.d
+    cap_add:
+      - NET_ADMIN
+    networks:
+      public:
+        ipv4_address: 10.21.0.23
+      research:
+        ipv4_address: 10.20.0.23
+
+  unsandbox:
+    container_name: unsandbox
+    hostname: unsandbox.lab
+    build:
+      context: .
+      dockerfile: build/unsandbox.Dockerfile
+    image: 'csalab/barenv-unsandbox:latest'
+    ports:
+      - 0.0.0.0:9191:80
+    environment:
+      - PASSWORD=${PASSWORD:-password}
+    dns:
+      - 10.21.0.23
+    networks:
+      public:
+        ipv4_address: 10.21.0.24
+      research:
+        ipv4_address: 10.20.0.24
 
 networks:
   public:
@@ -103,3 +162,7 @@ networks:
       config:
         - subnet: 10.20.0.0/24
           gateway: 10.20.0.1
+
+volumes:
+  pihole_etc: {}
+  pihole_dns: {}
