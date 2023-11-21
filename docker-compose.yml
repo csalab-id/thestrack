@@ -1,86 +1,5 @@
 version: '3.8'
 services:
-  tomcat:
-    container_name: tomcat
-    hostname: tomcat.lab
-    image: 'tomcat:9.0.83'
-    volumes:
-      - ./data/tomcat:/usr/local/tomcat/webapps/webapp
-    environment:
-      - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
-    depends_on:
-      - mitmproxy
-    networks:
-      research:
-        ipv4_address: 10.20.0.10
-
-  php8:
-    container_name: php8
-    hostname: php8.lab
-    image: 'php:8.3-rc-apache-bookworm'
-    volumes:
-      - ./data/php/8:/var/www/html
-    environment:
-      - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
-    depends_on:
-      - mitmproxy
-    networks:
-      research:
-        ipv4_address: 10.20.0.17
-  
-  mitmproxy:
-    container_name: mitmproxy
-    hostname: mitmproxy.lab
-    image: 'mitmproxy/mitmproxy:10.1.5'
-    command: ["mitmweb", "--web-host", "0.0.0.0"]
-    volumes:
-      - mitmproxy:/home/mitmproxy/.mitmproxy
-    dns:
-      - 10.21.0.23
-    depends_on:
-      - pihole
-    networks:
-      public:
-        ipv4_address: 10.21.0.20
-      research:
-        ipv4_address: 10.20.0.20
-
-  sandbox:
-    container_name: sandbox
-    hostname: sandbox.lab
-    image: 'csalab/barenv-sandbox:latest'
-    environment:
-      - PASSWORD=${PASSWORD:-password}
-      - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
-    volumes:
-      - data:/root/data
-    depends_on:
-      - mitmproxy
-    networks:
-      research:
-        ipv4_address: 10.20.0.21
-  
-  pihole:
-    container_name: pihole
-    hostname: pihole.lab
-    image: pihole/pihole:latest
-    environment:
-      - TZ=Asia/Jakarta
-      - WEBPASSWORD=${PASSWORD:-password}
-    volumes:
-      - pihole_etc:/etc/pihole
-      - pihole_dns:/etc/dnsmasq.d
-    cap_add:
-      - NET_ADMIN
-    networks:
-      public:
-        ipv4_address: 10.21.0.23
-      research:
-        ipv4_address: 10.20.0.23
-
   unsandbox:
     container_name: unsandbox
     hostname: unsandbox.lab
@@ -89,13 +8,9 @@ services:
       - PASSWORD=${PASSWORD:-password}
     volumes:
       - data:/root/data
-    dns:
-      - 10.21.0.23
     networks:
       public:
         ipv4_address: 10.21.0.24
-      research:
-        ipv4_address: 10.20.0.24
 
   cloudflared:
     hostname: cloudflared
@@ -106,13 +21,10 @@ services:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN:-secret}
     command: ["tunnel", "--no-autoupdate", "run"]
     depends_on:
-      - sandbox
       - unsandbox
     networks:
       public:
         ipv4_address: 10.21.0.25
-      research:
-        ipv4_address: 10.20.0.25
 
 networks:
   public:
@@ -121,16 +33,6 @@ networks:
       config:
         - subnet: 10.21.0.0/24
           gateway: 10.21.0.1
-  research:
-    driver: bridge
-    internal: true
-    ipam:
-      config:
-        - subnet: 10.20.0.0/24
-          gateway: 10.20.0.1
 
 volumes:
-  pihole_etc: {}
-  pihole_dns: {}
   data: {}
-  mitmproxy: {}
