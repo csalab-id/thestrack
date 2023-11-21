@@ -15,36 +15,6 @@ services:
       research:
         ipv4_address: 10.20.0.10
 
-  php5:
-    container_name: php5
-    hostname: php5.lab
-    image: 'php:5.6.40-apache-stretch'
-    volumes:
-      - ./data/php/5:/var/www/html
-    environment:
-      - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
-    depends_on:
-      - mitmproxy
-    networks:
-      research:
-        ipv4_address: 10.20.0.15
-
-  php7:
-    container_name: php7
-    hostname: php7.lab
-    image: 'php:7.4.33-apache-bullseye'
-    volumes:
-      - ./data/php/7:/var/www/html
-    environment:
-      - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
-    depends_on:
-      - mitmproxy
-    networks:
-      research:
-        ipv4_address: 10.20.0.16
-
   php8:
     container_name: php8
     hostname: php8.lab
@@ -80,9 +50,6 @@ services:
   sandbox:
     container_name: sandbox
     hostname: sandbox.lab
-    build:
-      context: .
-      dockerfile: build/sandbox.Dockerfile
     image: 'csalab/barenv-sandbox:latest'
     environment:
       - PASSWORD=${PASSWORD:-password}
@@ -117,9 +84,6 @@ services:
   unsandbox:
     container_name: unsandbox
     hostname: unsandbox.lab
-    build:
-      context: .
-      dockerfile: build/unsandbox.Dockerfile
     image: 'csalab/barenv-unsandbox:latest'
     environment:
       - PASSWORD=${PASSWORD:-password}
@@ -132,6 +96,23 @@ services:
         ipv4_address: 10.21.0.24
       research:
         ipv4_address: 10.20.0.24
+
+  cloudflared:
+    hostname: cloudflared
+    container_name: cloudflared
+    image: cloudflare/cloudflared:latest
+    restart: always
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN:-secret}
+    command: ["tunnel", "--no-autoupdate", "run"]
+    depends_on:
+      - sandbox
+      - unsandbox
+    networks:
+      public:
+        ipv4_address: 10.21.0.25
+      research:
+        ipv4_address: 10.20.0.25
 
 networks:
   public:
