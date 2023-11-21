@@ -67,6 +67,8 @@ services:
     command: ["mitmweb", "--web-host", "0.0.0.0"]
     ports:
       - 0.0.0.0:8081:8081
+    volumes:
+      - mitmproxy:/home/mitmproxy/.mitmproxy
     dns:
       - 10.21.0.23
     depends_on:
@@ -88,6 +90,8 @@ services:
       - PASSWORD=${PASSWORD:-password}
       - http_proxy=http://10.20.0.20:8080
       - http_proxys=http://10.20.0.20:8080
+    volumes:
+      - data:/root/data
     depends_on:
       - mitmproxy
     networks:
@@ -140,6 +144,8 @@ services:
       - 0.0.0.0:9191:80
     environment:
       - PASSWORD=${PASSWORD:-password}
+    volumes:
+      - data:/root/data
     dns:
       - 10.21.0.23
     networks:
@@ -166,3 +172,5 @@ networks:
 volumes:
   pihole_etc: {}
   pihole_dns: {}
+  data: {}
+  mitmproxy: {}
