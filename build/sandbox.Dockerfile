@@ -1,5 +1,6 @@
-FROM debian:12
-RUN apt-get update && \
+FROM kalilinux/kali-rolling:latest
+RUN sed -i "s/http.kali.org/mirrors.ocf.berkeley.edu/g" /etc/apt/sources.list && \
+apt-get update && \
 apt-get install -y openbox \
   firefox-esr \
   curl \
