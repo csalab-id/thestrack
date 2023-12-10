@@ -19,10 +19,10 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          name: Checking barenv-sandbox docker file code quality
+          name: Checking thestrack-sandbox docker file code quality
           command: docker run --rm -i ghcr.io/hadolint/hadolint:latest < build/sandbox.Dockerfile || true
       - run:
-          name: Checking barenv-unsandbox docker file code quality
+          name: Checking thestrack-unsandbox docker file code quality
           command: docker run --rm -i ghcr.io/hadolint/hadolint:latest < build/unsandbox.Dockerfile || true
   build-sandbox:
     executor: docker
@@ -33,8 +33,8 @@ jobs:
           name: Build sandbox image
           command: |
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin $DOCKER_REGISTRY
-            docker build -t $DOCKER_REGISTRY/$REGISTRY_USER/barenv-sandbox:$IMAGE_VERSION . -f build/sandbox.Dockerfile
-            docker push $DOCKER_REGISTRY/$REGISTRY_USER/barenv-sandbox:$IMAGE_VERSION
+            docker build -t $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-sandbox:$IMAGE_VERSION . -f build/sandbox.Dockerfile
+            docker push $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-sandbox:$IMAGE_VERSION
   build-unsandbox:
     executor: docker
     steps:
@@ -44,8 +44,8 @@ jobs:
           name: Build unsandbox image
           command: |
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin $DOCKER_REGISTRY
-            docker build -t $DOCKER_REGISTRY/$REGISTRY_USER/barenv-unsandbox:$IMAGE_VERSION . -f build/unsandbox.Dockerfile
-            docker push $DOCKER_REGISTRY/$REGISTRY_USER/barenv-unsandbox:$IMAGE_VERSION
+            docker build -t $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-unsandbox:$IMAGE_VERSION . -f build/unsandbox.Dockerfile
+            docker push $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-unsandbox:$IMAGE_VERSION
 
 workflows:
   version: 2
