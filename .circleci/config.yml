@@ -5,7 +5,7 @@ parameters:
     type: enum
     default: auto
     description: The workflow to trigger.
-    enum: [auto, manual, all]
+    enum: [auto, manual, php5, all]
 
 executors:
   docker:
@@ -151,5 +151,12 @@ workflows:
           requires:
             - hadolint
       - build-mailhog:
+          requires:
+            - hadolint
+  build-image-php5:
+    when: { equal: [ php5, << pipeline.parameters.workflow >> ] }
+    jobs:
+      - hadolint
+      - build-php5:
           requires:
             - hadolint
