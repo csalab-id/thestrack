@@ -5,7 +5,7 @@ parameters:
     type: enum
     default: auto
     description: The workflow to trigger.
-    enum: [auto, manual]
+    enum: [auto, manual, all]
 
 executors:
   docker:
@@ -46,6 +46,50 @@ jobs:
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin $DOCKER_REGISTRY
             docker build -t $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-unsandbox:$IMAGE_VERSION . -f build/unsandbox.Dockerfile
             docker push $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-unsandbox:$IMAGE_VERSION
+  build-php5:
+    executor: docker
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build php5 image
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin $DOCKER_REGISTRY
+            docker build -t $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-php5:$IMAGE_VERSION . -f build/php5.Dockerfile
+            docker push $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-php5:$IMAGE_VERSION
+  build-php7:
+    executor: docker
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build php7 image
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin $DOCKER_REGISTRY
+            docker build -t $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-php7:$IMAGE_VERSION . -f build/php7.Dockerfile
+            docker push $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-php7:$IMAGE_VERSION
+  build-php8:
+    executor: docker
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build php8 image
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin $DOCKER_REGISTRY
+            docker build -t $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-php8:$IMAGE_VERSION . -f build/php8.Dockerfile
+            docker push $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-php8:$IMAGE_VERSION
+  build-mailhog:
+    executor: docker
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build mailhog image
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin $DOCKER_REGISTRY
+            docker build -t $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-mailhog:$IMAGE_VERSION . -f build/mailhog.Dockerfile
+            docker push $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-mailhog:$IMAGE_VERSION
 
 workflows:
   version: 2
@@ -61,5 +105,27 @@ workflows:
           requires:
             - hadolint
       - build-unsandbox:
+          requires:
+            - hadolint
+  build-image-all:
+    when: { equal: [ all, << pipeline.parameters.workflow >> ] }
+    jobs:
+      - hadolint
+      - build-sandbox:
+          requires:
+            - hadolint
+      - build-unsandbox:
+          requires:
+            - hadolint
+      - build-php5:
+          requires:
+            - hadolint
+      - build-php7:
+          requires:
+            - hadolint
+      - build-php8:
+          requires:
+            - hadolint
+      - build-mailhog:
           requires:
             - hadolint
