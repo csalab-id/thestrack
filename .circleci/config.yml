@@ -24,6 +24,18 @@ jobs:
       - run:
           name: Checking thestrack-unsandbox docker file code quality
           command: docker run --rm -i ghcr.io/hadolint/hadolint:latest < build/unsandbox.Dockerfile || true
+      - run:
+          name: Checking thestrack-php5 docker file code quality
+          command: docker run --rm -i ghcr.io/hadolint/hadolint:latest < build/php5.Dockerfile || true
+      - run:
+          name: Checking thestrack-php7 docker file code quality
+          command: docker run --rm -i ghcr.io/hadolint/hadolint:latest < build/php7.Dockerfile || true
+      - run:
+          name: Checking thestrack-php8 docker file code quality
+          command: docker run --rm -i ghcr.io/hadolint/hadolint:latest < build/php8.Dockerfile || true
+      - run:
+          name: Checking thestrack-mailhog docker file code quality
+          command: docker run --rm -i ghcr.io/hadolint/hadolint:latest < build/mailhog.Dockerfile || true
   build-sandbox:
     executor: docker
     steps:
