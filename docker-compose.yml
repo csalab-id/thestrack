@@ -119,10 +119,10 @@ services:
     hostname: socat.lab
     image: 'alpine/socat:1.7.4.4'
     ports:
-      - 0.0.0.0:9000:9000
+      - 0.0.0.0:8080:8080
     depends_on:
       - sandbox
-    entrypoint: ["socat", "TCP-LISTEN:9000,fork", "TCP:10.20.0.21:80"]
+    entrypoint: ["socat", "TCP-LISTEN:8080,fork", "TCP:10.20.0.21:80"]
     networks:
       public:
         ipv4_address: 10.21.0.22
