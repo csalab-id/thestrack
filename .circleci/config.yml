@@ -5,7 +5,7 @@ parameters:
     type: enum
     default: auto
     description: The workflow to trigger.
-    enum: [auto, manual, php5, all]
+    enum: [auto, dekstop, php-all, php5, php7, php8, mailhog, all]
 
 executors:
   docker:
@@ -121,14 +121,27 @@ workflows:
     when: { equal: [ auto, << pipeline.parameters.workflow >> ] }
     jobs:
       - hadolint
-  build-image-manual:
-    when: { equal: [ manual, << pipeline.parameters.workflow >> ] }
+  build-image-desktop:
+    when: { equal: [ desktop, << pipeline.parameters.workflow >> ] }
     jobs:
       - hadolint
       - build-sandbox:
           requires:
             - hadolint
       - build-unsandbox:
+          requires:
+            - hadolint
+  build-image-php-all:
+    when: { equal: [ php-all, << pipeline.parameters.workflow >> ] }
+    jobs:
+      - hadolint
+      - build-php5:
+          requires:
+            - hadolint
+      - build-php7:
+          requires:
+            - hadolint
+      - build-php8:
           requires:
             - hadolint
   build-image-all:
@@ -158,5 +171,26 @@ workflows:
     jobs:
       - hadolint
       - build-php5:
+          requires:
+            - hadolint
+  build-image-php7:
+    when: { equal: [ php7, << pipeline.parameters.workflow >> ] }
+    jobs:
+      - hadolint
+      - build-php7:
+          requires:
+            - hadolint
+  build-image-php8:
+    when: { equal: [ php8, << pipeline.parameters.workflow >> ] }
+    jobs:
+      - hadolint
+      - build-php8:
+          requires:
+            - hadolint
+  build-image-mailhog:
+    when: { equal: [ mailhog, << pipeline.parameters.workflow >> ] }
+    jobs:
+      - hadolint
+      - build-mailhog:
           requires:
             - hadolint
