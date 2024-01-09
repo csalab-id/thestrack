@@ -16,24 +16,6 @@ services:
       research:
         ipv4_address: 10.20.0.10
 
-  dotnet:
-    hostname: dotnet.lab
-    build:
-      context: .
-      dockerfile: build/dotnet.Dockerfile
-    image: 'csalab/dotnet:latest'
-    environment:
-      - TZ=UTC
-      - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
-    depends_on:
-      - mitmproxy
-    dns:
-      - 10.20.0.23
-    networks:
-      research:
-        ipv4_address: 10.20.0.11
-
   php5:
     hostname: php5.lab
     build:
@@ -96,7 +78,7 @@ services:
     networks:
       research:
         ipv4_address: 10.20.0.17
-  
+
   mitmproxy:
     hostname: mitmproxy.lab
     image: 'mitmproxy/mitmproxy:10.1.5'
@@ -146,7 +128,7 @@ services:
         ipv4_address: 10.21.0.22
       research:
         ipv4_address: 10.20.0.22
-  
+
   pihole:
     hostname: pihole.lab
     image: 'pihole/pihole:latest'
