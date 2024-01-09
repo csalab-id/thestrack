@@ -42,8 +42,8 @@ if [ ! -f /usr/local/share/ca-certificates/mitmproxy.crt ]
 then
     sudo curl --proxy http://10.20.0.20:8080 http://mitm.it/cert/pem -o /usr/local/share/ca-certificates/mitmproxy.crt
     sudo bash -c "cat /usr/local/share/ca-certificates/mitmproxy.crt >> /etc/ssl/certs/ca-certificates.crt"
+    sudo update-ca-certificates
 fi
-sudo update-ca-certificates
 
 vncpasswd -f <<< $PASSWORD > ~/.vnc/passwd
 vncserver -PasswordFile ~/.vnc/passwd

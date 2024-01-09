@@ -7,7 +7,7 @@ services:
       - ./data/jsp:/usr/local/tomcat/webapps/webapp
     environment:
       - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
+      - https_proxy=http://10.20.0.20:8080
     depends_on:
       - mitmproxy
     dns:
@@ -26,13 +26,21 @@ services:
       - ./data/php:/var/www/html
     environment:
       - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
+      - https_proxy=http://10.20.0.20:8080
     depends_on:
       - mitmproxy
     dns:
       - 10.20.0.23
     command: >
-      bash -c "socat TCP-LISTEN:1025,fork TCP:10.20.0.25:1025 & apache2-foreground"
+      bash -c "if [ ! -f /usr/local/share/ca-certificates/mitmproxy.crt ]
+        then
+          curl --proxy http://10.20.0.20:8080 http://mitm.it/cert/pem -o /usr/local/share/ca-certificates/mitmproxy.crt
+          cat /usr/local/share/ca-certificates/mitmproxy.crt >> /etc/ssl/certs/ca-certificates.crt
+          update-ca-certificates
+        fi &&
+        socat TCP-LISTEN:1025,fork TCP:10.20.0.25:1025 &
+        apache2-foreground
+      "
     networks:
       research:
         ipv4_address: 10.20.0.15
@@ -47,13 +55,21 @@ services:
       - ./data/php:/var/www/html
     environment:
       - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
+      - https_proxy=http://10.20.0.20:8080
     depends_on:
       - mitmproxy
     dns:
       - 10.20.0.23
     command: >
-      bash -c "socat TCP-LISTEN:1025,fork TCP:10.20.0.25:1025 & apache2-foreground"
+      bash -c "if [ ! -f /usr/local/share/ca-certificates/mitmproxy.crt ]
+        then
+          curl --proxy http://10.20.0.20:8080 http://mitm.it/cert/pem -o /usr/local/share/ca-certificates/mitmproxy.crt
+          cat /usr/local/share/ca-certificates/mitmproxy.crt >> /etc/ssl/certs/ca-certificates.crt
+          update-ca-certificates
+        fi &&
+        socat TCP-LISTEN:1025,fork TCP:10.20.0.25:1025 &
+        apache2-foreground
+      "
     networks:
       research:
         ipv4_address: 10.20.0.16
@@ -68,13 +84,21 @@ services:
       - ./data/php:/var/www/html
     environment:
       - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
+      - https_proxy=http://10.20.0.20:8080
     depends_on:
       - mitmproxy
     dns:
       - 10.20.0.23
     command: >
-      bash -c "socat TCP-LISTEN:1025,fork TCP:10.20.0.25:1025 & apache2-foreground"
+      bash -c "if [ ! -f /usr/local/share/ca-certificates/mitmproxy.crt ]
+        then
+          curl --proxy http://10.20.0.20:8080 http://mitm.it/cert/pem -o /usr/local/share/ca-certificates/mitmproxy.crt
+          cat /usr/local/share/ca-certificates/mitmproxy.crt >> /etc/ssl/certs/ca-certificates.crt
+          update-ca-certificates
+        fi &&
+        socat TCP-LISTEN:1025,fork TCP:10.20.0.25:1025 &
+        apache2-foreground
+      "
     networks:
       research:
         ipv4_address: 10.20.0.17
@@ -104,7 +128,7 @@ services:
     environment:
       - PASSWORD=${PASSWORD:-password}
       - http_proxy=http://10.20.0.20:8080
-      - http_proxys=http://10.20.0.20:8080
+      - https_proxy=http://10.20.0.20:8080
     volumes:
       - ./data/data:/root/data
     dns:
