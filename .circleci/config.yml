@@ -5,7 +5,7 @@ parameters:
     type: enum
     default: auto
     description: The workflow to trigger.
-    enum: [auto, dekstop, php-all, php5, php7, php8, mailhog, all]
+    enum: [auto, desktop, php-all, php5, php7, php8, mailhog, all]
 
 executors:
   docker:

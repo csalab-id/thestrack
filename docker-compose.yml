@@ -12,6 +12,15 @@ services:
       - mitmproxy
     dns:
       - 10.20.0.23
+    command: >
+      bash -c "if [ ! -f /usr/local/share/ca-certificates/mitmproxy.crt ]
+        then
+          curl --proxy http://10.20.0.20:8080 http://mitm.it/cert/pem -o /usr/local/share/ca-certificates/mitmproxy.crt
+          cat /usr/local/share/ca-certificates/mitmproxy.crt >> /etc/ssl/certs/ca-certificates.crt
+          update-ca-certificates
+        fi &&
+        catalina.sh run
+      "
     networks:
       research:
         ipv4_address: 10.20.0.10
