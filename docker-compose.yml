@@ -2,7 +2,7 @@ version: '3.8'
 services:
   tomcat:
     hostname: tomcat.lab
-    image: 'tomcat:9.0.83'
+    image: 'tomcat:9.0.87'
     volumes:
       - ./data/jsp:/usr/local/tomcat/webapps/webapp
     environment:
@@ -30,7 +30,7 @@ services:
     build:
       context: .
       dockerfile: build/php5.Dockerfile
-    image: 'csalab/thestrack-php5:latest'
+    image: 'csalab/thestrack:php5'
     volumes:
       - ./data/php:/var/www/html
     environment:
@@ -59,7 +59,7 @@ services:
     build:
       context: .
       dockerfile: build/php7.Dockerfile
-    image: 'csalab/thestrack-php7:latest'
+    image: 'csalab/thestrack:php7'
     volumes:
       - ./data/php:/var/www/html
     environment:
@@ -88,7 +88,7 @@ services:
     build:
       context: .
       dockerfile: build/php8.Dockerfile
-    image: 'csalab/thestrack-php8:latest'
+    image: 'csalab/thestrack:php8'
     volumes:
       - ./data/php:/var/www/html
     environment:
@@ -114,7 +114,7 @@ services:
 
   mitmproxy:
     hostname: mitmproxy.lab
-    image: 'mitmproxy/mitmproxy:10.1.5'
+    image: 'mitmproxy/mitmproxy:10.2.4'
     command: ["mitmweb", "--web-host", "0.0.0.0"]
     volumes:
       - mitmproxy:/home/mitmproxy/.mitmproxy
@@ -133,13 +133,13 @@ services:
     build:
       context: .
       dockerfile: build/sandbox.Dockerfile
-    image: 'csalab/thestrack-sandbox:latest'
+    image: 'csalab/thestrack:sandbox'
     environment:
       - PASSWORD=${PASSWORD:-password}
       - http_proxy=http://10.20.0.20:8080
       - https_proxy=http://10.20.0.20:8080
     volumes:
-      - ./data/data:/root/data
+      - ./data/data:/home/kali/Desktop/data
     dns:
       - 10.20.0.23
     depends_on:
@@ -150,7 +150,7 @@ services:
 
   socat:
     hostname: socat.lab
-    image: 'alpine/socat:1.7.4.4'
+    image: 'alpine/socat:1.8.0.0'
     ports:
       - 0.0.0.0:8080:8080
     depends_on:
@@ -184,13 +184,13 @@ services:
     build:
       context: .
       dockerfile: build/unsandbox.Dockerfile
-    image: 'csalab/thestrack-unsandbox:latest'
+    image: 'csalab/thestrack:unsandbox'
     ports:
       - 0.0.0.0:8000:80
     environment:
       - PASSWORD=${PASSWORD:-password}
     volumes:
-      - ./data/data:/root/data
+      - ./data/data:/home/kali/Desktop/data
     dns:
       - 10.21.0.23
     networks:
@@ -204,7 +204,7 @@ services:
     build:
       context: .
       dockerfile: build/mailhog.Dockerfile
-    image: 'csalab/thestrack-mailhog:latest'
+    image: 'csalab/thestrack:mailhog'
     restart: always
     networks:
       public:
