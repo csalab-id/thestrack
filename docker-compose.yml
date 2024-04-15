@@ -30,7 +30,7 @@ services:
     build:
       context: .
       dockerfile: build/php5.Dockerfile
-    image: 'csalab/thestrack-php5:latest'
+    image: 'csalab/thestrack:php5'
     volumes:
       - ./data/php:/var/www/html
     environment:
@@ -59,7 +59,7 @@ services:
     build:
       context: .
       dockerfile: build/php7.Dockerfile
-    image: 'csalab/thestrack-php7:latest'
+    image: 'csalab/thestrack:php7'
     volumes:
       - ./data/php:/var/www/html
     environment:
@@ -88,7 +88,7 @@ services:
     build:
       context: .
       dockerfile: build/php8.Dockerfile
-    image: 'csalab/thestrack-php8:latest'
+    image: 'csalab/thestrack:php8'
     volumes:
       - ./data/php:/var/www/html
     environment:
@@ -133,7 +133,7 @@ services:
     build:
       context: .
       dockerfile: build/sandbox.Dockerfile
-    image: 'csalab/thestrack-sandbox:latest'
+    image: 'csalab/thestrack:sandbox'
     environment:
       - PASSWORD=${PASSWORD:-password}
       - http_proxy=http://10.20.0.20:8080
@@ -184,7 +184,7 @@ services:
     build:
       context: .
       dockerfile: build/unsandbox.Dockerfile
-    image: 'csalab/thestrack-unsandbox:latest'
+    image: 'csalab/thestrack:unsandbox'
     ports:
       - 0.0.0.0:8000:80
     environment:
@@ -204,7 +204,7 @@ services:
     build:
       context: .
       dockerfile: build/mailhog.Dockerfile
-    image: 'csalab/thestrack-mailhog:latest'
+    image: 'csalab/thestrack:mailhog'
     restart: always
     networks:
       public:

@@ -48,7 +48,7 @@ jobs:
             export DOCKER_CLI_EXPERIMENTAL=enabled
             docker context create buildx-build
             docker buildx create --use buildx-build
-            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-sandbox:$IMAGE_VERSION --platform linux/amd64,linux/arm64 -f build/sandbox.Dockerfile .
+            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack:sandbox --platform linux/amd64,linux/arm64 -f build/sandbox.Dockerfile .
   build-unsandbox:
     executor: docker
     steps:
@@ -61,7 +61,7 @@ jobs:
             export DOCKER_CLI_EXPERIMENTAL=enabled
             docker context create buildx-build
             docker buildx create --use buildx-build
-            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-unsandbox:$IMAGE_VERSION --platform linux/amd64,linux/arm64 -f build/unsandbox.Dockerfile .
+            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack:unsandbox --platform linux/amd64,linux/arm64 -f build/unsandbox.Dockerfile .
   build-php5:
     executor: docker
     steps:
@@ -74,7 +74,7 @@ jobs:
             export DOCKER_CLI_EXPERIMENTAL=enabled
             docker context create buildx-build
             docker buildx create --use buildx-build
-            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-php5:$IMAGE_VERSION --platform linux/amd64,linux/arm64 -f build/php5.Dockerfile .
+            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack:php5 --platform linux/amd64,linux/arm64 -f build/php5.Dockerfile .
   build-php7:
     executor: docker
     steps:
@@ -87,7 +87,7 @@ jobs:
             export DOCKER_CLI_EXPERIMENTAL=enabled
             docker context create buildx-build
             docker buildx create --use buildx-build
-            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-php7:$IMAGE_VERSION --platform linux/amd64,linux/arm64 -f build/php7.Dockerfile .
+            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack:php7 --platform linux/amd64,linux/arm64 -f build/php7.Dockerfile .
   build-php8:
     executor: docker
     steps:
@@ -100,7 +100,7 @@ jobs:
             export DOCKER_CLI_EXPERIMENTAL=enabled
             docker context create buildx-build
             docker buildx create --use buildx-build
-            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-php8:$IMAGE_VERSION --platform linux/amd64,linux/arm64 -f build/php8.Dockerfile .
+            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack:php8 --platform linux/amd64,linux/arm64 -f build/php8.Dockerfile .
   build-mailhog:
     executor: docker
     steps:
@@ -113,7 +113,7 @@ jobs:
             export DOCKER_CLI_EXPERIMENTAL=enabled
             docker context create buildx-build
             docker buildx create --use buildx-build
-            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack-mailhog:$IMAGE_VERSION --platform linux/amd64,linux/arm64 -f build/mailhog.Dockerfile .
+            docker buildx build --push --tag $DOCKER_REGISTRY/$REGISTRY_USER/thestrack:mailhog --platform linux/amd64,linux/arm64 -f build/mailhog.Dockerfile .
 
 workflows:
   version: 2
