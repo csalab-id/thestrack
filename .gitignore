@@ -1,4 +1,2 @@
 devel.yml
 build/*-dev.Dockerfile
-data/jsp/source/
-data/php/source/

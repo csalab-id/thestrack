@@ -5,7 +5,7 @@ parameters:
     type: enum
     default: auto
     description: The workflow to trigger.
-    enum: [auto, desktop, php-all, php5, php7, php8, mailhog, all]
+    enum: [auto, sandbox, unsandbox, php-all, php5, php7, php8, mailhog, all]
 
 executors:
   docker:
@@ -121,13 +121,17 @@ workflows:
     when: { equal: [ auto, << pipeline.parameters.workflow >> ] }
     jobs:
       - hadolint
-  build-image-desktop:
-    when: { equal: [ desktop, << pipeline.parameters.workflow >> ] }
+  build-image-sandbox:
+    when: { equal: [ sandbox, << pipeline.parameters.workflow >> ] }
     jobs:
       - hadolint
       - build-sandbox:
           requires:
             - hadolint
+  build-image-unsandbox:
+    when: { equal: [ unsandbox, << pipeline.parameters.workflow >> ] }
+    jobs:
+      - hadolint
       - build-unsandbox:
           requires:
             - hadolint
