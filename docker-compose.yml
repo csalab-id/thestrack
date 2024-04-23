@@ -212,6 +212,23 @@ services:
       research:
         ipv4_address: 10.20.0.25
 
+  viper:
+    image: csalab/csaf:viper
+    hostname: viper.lab
+    restart: always
+    volumes:
+      - viper_loot:/root/.msf4/loot
+      - viper_db:/root/viper/Docker/db
+      - viper_module:/root/viper/Docker/module
+      - viper_log:/root/viper/Docker/log
+      - viper_nginxconfig:/root/viper/Docker/nginxconfig
+    command: ["viperpassword"]
+    networks:
+      public:
+        ipv4_address: 10.21.0.26
+      research:
+        ipv4_address: 10.20.0.26
+
 networks:
   public:
     driver: bridge
@@ -231,3 +248,8 @@ volumes:
   pihole_etc: {}
   pihole_dns: {}
   mitmproxy: {}
+  viper_loot: {}
+  viper_db: {}
+  viper_module: {}
+  viper_log: {}
+  viper_nginxconfig: {}
