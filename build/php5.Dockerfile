@@ -1,4 +1,4 @@
-FROM golang:1.18-stretch as builder
+FROM golang:1-stretch as builder
 RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list && \
 echo "deb http://archive.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list && \
 apt-get update && \
@@ -7,7 +7,7 @@ mkdir -p /root/gocode && \
 export GOPATH=/root/gocode && \
 go install github.com/mailhog/mhsendmail@latest
 
-FROM php:5.6.40-apache-stretch
+FROM php:5-apache-stretch
 COPY --from=builder /root/gocode/bin/mhsendmail /usr/local/bin/mhsendmail
 RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list && \
 echo "deb http://archive.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list && \

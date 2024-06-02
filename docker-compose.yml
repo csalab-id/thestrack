@@ -1,8 +1,7 @@
-version: '3.8'
 services:
   tomcat:
     hostname: tomcat.lab
-    image: 'tomcat:9.0.87'
+    image: 'tomcat:10'
     volumes:
       - ./data/jsp:/usr/local/tomcat/webapps/webapp
     environment:
@@ -114,7 +113,7 @@ services:
 
   mitmproxy:
     hostname: mitmproxy.lab
-    image: 'mitmproxy/mitmproxy:10.2.4'
+    image: 'mitmproxy/mitmproxy:10.3.0'
     command: ["mitmweb", "--web-host", "0.0.0.0"]
     volumes:
       - mitmproxy:/home/mitmproxy/.mitmproxy
@@ -150,7 +149,7 @@ services:
 
   socat:
     hostname: socat.lab
-    image: 'alpine/socat:1.8.0.0'
+    image: 'alpine/socat:latest'
     ports:
       - 0.0.0.0:8080:8080
     depends_on:

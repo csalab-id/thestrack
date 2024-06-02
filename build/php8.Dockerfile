@@ -1,4 +1,4 @@
-FROM php:8.3-rc-apache-bookworm
+FROM php:8-apache-bookworm
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get -yq install golang git socat && \
 GOPATH=/root/go go install github.com/mailhog/mhsendmail@latest && \

@@ -1,4 +1,4 @@
-FROM php:7.4.33-apache-bullseye
+FROM php:7-apache-bullseye
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get -yq install golang git socat && \
 GOPATH=/root/go go get github.com/mailhog/mhsendmail && \
