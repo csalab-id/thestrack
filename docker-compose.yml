@@ -134,7 +134,7 @@ services:
       dockerfile: build/sandbox.Dockerfile
     image: 'csalab/thestrack:sandbox'
     environment:
-      - PASSWORD=${PASSWORD:-password}
+      - PASSWORD=${SANDBOX_PASS:-password}
       - http_proxy=http://10.20.0.20:8080
       - https_proxy=http://10.20.0.20:8080
     volumes:
@@ -166,7 +166,7 @@ services:
     image: 'pihole/pihole:latest'
     environment:
       - TZ=Asia/Jakarta
-      - WEBPASSWORD=${PASSWORD:-password}
+      - WEBPASSWORD=${PIHOLE_PASS:-password}
     volumes:
       - pihole_etc:/etc/pihole
       - pihole_dns:/etc/dnsmasq.d
@@ -187,7 +187,7 @@ services:
     ports:
       - ${UNSANDBOX_PORT:-0.0.0.0:8000}:80
     environment:
-      - PASSWORD=${PASSWORD:-password}
+      - PASSWORD=${UNSANDBOX_PASS:-password}
     volumes:
       - ./data/data:/home/kali/Desktop/data
     dns:
