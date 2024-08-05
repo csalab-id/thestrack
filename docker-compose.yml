@@ -151,7 +151,7 @@ services:
     hostname: socat.lab
     image: 'alpine/socat:latest'
     ports:
-      - 0.0.0.0:8080:8080
+      - ${SANDBOX_PORT:-0.0.0.0:8080}:8080
     depends_on:
       - sandbox
     entrypoint: ["socat", "TCP-LISTEN:8080,fork", "TCP:10.20.0.21:80"]
@@ -185,7 +185,7 @@ services:
       dockerfile: build/unsandbox.Dockerfile
     image: 'csalab/thestrack:unsandbox'
     ports:
-      - 0.0.0.0:8000:80
+      - ${UNSANDBOX_PORT:-0.0.0.0:8000}:80
     environment:
       - PASSWORD=${PASSWORD:-password}
     volumes:
