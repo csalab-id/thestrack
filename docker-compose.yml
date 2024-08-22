@@ -2,6 +2,7 @@ services:
   tomcat:
     hostname: tomcat.lab
     image: 'tomcat:10'
+    restart: always
     volumes:
       - ./data/jsp:/usr/local/tomcat/webapps/webapp
     environment:
@@ -30,6 +31,7 @@ services:
       context: .
       dockerfile: build/php5.Dockerfile
     image: 'csalab/thestrack:php5'
+    restart: always
     volumes:
       - ./data/php:/var/www/html
     environment:
@@ -59,6 +61,7 @@ services:
       context: .
       dockerfile: build/php7.Dockerfile
     image: 'csalab/thestrack:php7'
+    restart: always
     volumes:
       - ./data/php:/var/www/html
     environment:
@@ -88,6 +91,7 @@ services:
       context: .
       dockerfile: build/php8.Dockerfile
     image: 'csalab/thestrack:php8'
+    restart: always
     volumes:
       - ./data/php:/var/www/html
     environment:
@@ -115,6 +119,7 @@ services:
     hostname: mitmproxy.lab
     image: 'mitmproxy/mitmproxy:10.3.0'
     command: ["mitmweb", "--web-host", "0.0.0.0"]
+    restart: always
     volumes:
       - mitmproxy:/home/mitmproxy/.mitmproxy
     dns:
@@ -133,6 +138,7 @@ services:
       context: .
       dockerfile: build/sandbox.Dockerfile
     image: 'csalab/thestrack:sandbox'
+    restart: always
     environment:
       - PASSWORD=${SANDBOX_PASS:-password}
       - http_proxy=http://10.20.0.20:8080
@@ -150,6 +156,7 @@ services:
   socat:
     hostname: socat.lab
     image: 'alpine/socat:latest'
+    restart: always
     ports:
       - ${SANDBOX_PORT:-0.0.0.0:8080}:8080
     depends_on:
@@ -164,6 +171,7 @@ services:
   pihole:
     hostname: pihole.lab
     image: 'pihole/pihole:latest'
+    restart: always
     environment:
       - TZ=Asia/Jakarta
       - WEBPASSWORD=${PIHOLE_PASS:-password}
@@ -184,6 +192,7 @@ services:
       context: .
       dockerfile: build/unsandbox.Dockerfile
     image: 'csalab/thestrack:unsandbox'
+    restart: always
     ports:
       - ${UNSANDBOX_PORT:-0.0.0.0:8000}:80
     environment:
