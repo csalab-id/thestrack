@@ -172,6 +172,8 @@ services:
     hostname: pihole.lab
     image: 'pihole/pihole:latest'
     restart: always
+    healthcheck:
+      disable: true
     environment:
       - TZ=Asia/Jakarta
       - WEBPASSWORD=${PIHOLE_PASS:-password}
